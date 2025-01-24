@@ -30,7 +30,7 @@ public class MovieDto {
 
     private Integer releaseYear;
 
-    @NotBlank(message="poster is messing")
+    @NotBlank(message="poster is missing")
     private String poster;
 
     @NotBlank(message = "poster url is missing")
