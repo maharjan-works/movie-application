@@ -29,19 +29,37 @@ public class MovieController {
 
     }
 
-    private MovieDto convertToMovieDto(String movieDtoObj) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(movieDtoObj, MovieDto.class);
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<MovieDto> getById(@PathVariable Integer id){
         return ResponseEntity.ok(movieService.getMovie(id));
     }
 
-    @GetMapping()
+    @GetMapping("/all")
     public ResponseEntity<List<MovieDto>> getMovies(){
         return ResponseEntity.ok(movieService.getMovies());
     }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<MovieDto> updateMovieHandler(@PathVariable Integer id,
+                                                       @RequestPart MultipartFile file,
+                                                       @RequestPart String movieDtoStr
+    ) throws IOException {
+        if (file.isEmpty()) file = null;
+        return ResponseEntity.ok(movieService.updateMovie(id,convertToMovieDto(movieDtoStr) ,file));
+
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteMovieHandler(@PathVariable Integer id) throws IOException {
+        return ResponseEntity.ok(movieService.deleteMovie(id));
+    }
+
+
+    private MovieDto convertToMovieDto(String movieDtoObj) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(movieDtoObj, MovieDto.class);
+    }
+
 
 }
