@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/movie")
@@ -32,4 +33,15 @@ public class MovieController {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(movieDtoObj, MovieDto.class);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<MovieDto> getById(@PathVariable Integer id){
+        return ResponseEntity.ok(movieService.getMovie(id));
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<MovieDto>> getMovies(){
+        return ResponseEntity.ok(movieService.getMovies());
+    }
+
 }
