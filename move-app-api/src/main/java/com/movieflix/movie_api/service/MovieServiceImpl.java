@@ -1,6 +1,9 @@
 package com.movieflix.movie_api.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movieflix.movie_api.dto.MovieDto;
+import com.movieflix.movie_api.exception.FileExistsException;
+import com.movieflix.movie_api.exception.MovieNotFoundException;
 import com.movieflix.movie_api.model.Movie;
 import com.movieflix.movie_api.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -35,7 +39,7 @@ public class MovieServiceImpl implements MovieService {
 
         //1. upload the file
         if(Files.exists(Paths.get(path + File.separator + file.getOriginalFilename()))){
-            throw new RuntimeException("file already existed. Enter another file name");
+            throw new FileExistsException("file already existed. Enter another file name");
         }
           String uploadedFileName =  fileService.uploadFile(path, file);
 
@@ -74,7 +78,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public MovieDto getMovie(Integer id) {
         // 1. check the data in DB and if exists, fetch data of given id
-        Movie movie = movieRepository.findById(id).orElseThrow(() -> new RuntimeException("movie not found"));
+        Movie movie = movieRepository.findById(id).orElseThrow(() -> new MovieNotFoundException("movie not found"));
 
 
         //2. generate posterUrl
@@ -101,19 +105,12 @@ public class MovieServiceImpl implements MovieService {
 
         //2. iterate through the list, generate posterUrl for each movie object and map to MovieDto obj
         List<MovieDto> response = new ArrayList<>();
+
         for(Movie movie : movies){
             String posterUrl = baseUrl+"/file/"+ movie.getPoster();
-            MovieDto dto = new MovieDto(
-                    movie.getId(),
-                    movie.getTitle(),
-                    movie.getDirector(),
-                    movie.getStudio(),
-                    movie.getMovieCast(),
-                    movie.getReleaseYear(),
-                    movie.getPoster(),
-                    posterUrl
-            );
-            response.add(dto);
+            MovieDto mDto = new ObjectMapper().convertValue(movie, MovieDto.class);
+            mDto.setPosterUrl(posterUrl);
+            response.add(mDto);
         }
         return response;
     }
@@ -121,7 +118,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public MovieDto updateMovie(Integer id, MovieDto movieDto, MultipartFile file) throws IOException {
         //1. check if movie object exists with given id;
-        Movie movie = movieRepository.findById(id).orElseThrow(() -> new RuntimeException("movie not found"));
+        Movie movie = movieRepository.findById(id).orElseThrow(() -> new MovieNotFoundException("movie not found with id: "+ id));
 
         //2. if file is null, do nothing
         // if file is not null, the delete existing file associated with the record
@@ -147,7 +144,7 @@ public class MovieServiceImpl implements MovieService {
         Movie savedMovie = movieRepository.save(movie);
 
         // 6. generate posterUrl for it
-        String posterUrl = path +"/file/"+fileName;
+        String posterUrl = baseUrl+"/file/"+fileName;
 
         // 7. map to movieDto and return it ;
         return new MovieDto(
@@ -165,7 +162,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public String deleteMovie(Integer id) throws IOException {
         // 1. check if record exists
-        Movie movie = movieRepository.findById(id).orElseThrow(() -> new RuntimeException("movie not found"));
+        Movie movie = movieRepository.findById(id).orElseThrow(() -> new MovieNotFoundException("movie not found"));
 
         // 2. delete the file
             Files.deleteIfExists(Paths.get(path + File.separator + movie.getPoster()));

@@ -36,4 +36,5 @@ public class FileController {
         response.setContentType(MediaType.IMAGE_PNG_VALUE);
         StreamUtils.copy(resourceFile,response.getOutputStream());
     }
+
 }
