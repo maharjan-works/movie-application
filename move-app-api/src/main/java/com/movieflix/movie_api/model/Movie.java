@@ -18,12 +18,15 @@ public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(nullable = false) // database level validation
     @NotBlank(message="movie title is missing") // application level validation
     private String title;
+
     @Column(nullable = false)
     @NotBlank(message="director name is missing")
     private String director;
+
     @Column(nullable = false)
     @NotBlank(message="studio name is missing")
     private String studio;
