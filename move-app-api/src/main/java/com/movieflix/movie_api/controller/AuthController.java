@@ -12,10 +12,9 @@ import com.movieflix.movie_api.auth.service.RefreshTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -37,7 +36,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> authenticate(@RequestBody LoginRequest request){
-        return ResponseEntity.ok(authService.login(request));
+        return ok(authService.login(request));
     }
 
     @PostMapping("/refresh")
@@ -46,8 +45,12 @@ public class AuthController {
        User user = refreshToken.getUser();
 
        String accessToken = jwtService.generateToken(user);
-       return  ResponseEntity.ok(new AuthResponse(accessToken,refreshToken.getRefreshToken()));
+       return  ok(new AuthResponse(accessToken,refreshToken.getRefreshToken()));
+    }
 
+    @DeleteMapping("/refresh-token/{id}")
+    public ResponseEntity<String> deleteRefreshToken(@PathVariable Integer id){
+        return ResponseEntity.ok(refreshTokenService.delete(id));
     }
 
 

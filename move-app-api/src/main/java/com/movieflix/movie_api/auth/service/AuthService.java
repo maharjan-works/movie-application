@@ -9,16 +9,28 @@ import com.movieflix.movie_api.auth.dto.AuthResponse;
 import com.movieflix.movie_api.auth.dto.LoginRequest;
 import com.movieflix.movie_api.auth.dto.RegisterRequest;
 
+import com.movieflix.movie_api.exception.EmailAlreadyExistsException;
+import com.movieflix.movie_api.exception.UsernameAlreadyExistsException;
+import com.movieflix.movie_api.exception.SomethingWentWrongException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 //@RequiredArgsConstructor
+@Transactional
 public class AuthService {
+
+
+    Logger logger = LoggerFactory.getLogger(AuthService.class);
 
 
     @Autowired
@@ -38,16 +50,38 @@ public class AuthService {
     private AuthenticationManager authenticationManager;
 
 
-    public AuthResponse register(RegisterRequest request){
-       User  user = new ObjectMapper().convertValue(request, User.class);
-       user.setPassword(passwordEncoder.encode(request.getPassword()));
-       user.setRole(UserRole.USER);
-       var savedUser = userRepository.save(user);
+    public AuthResponse register(RegisterRequest request) {
 
-       var accessToken = jwtService.generateToken(savedUser);
-       RefreshToken refreshToken = refreshTokenService.createRefreshToken(savedUser.getEmail());
+        try {
 
-       return new AuthResponse(accessToken,refreshToken.getRefreshToken());
+            if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+                logger.info("EmailAlreadyExistsException thrown");
+                throw new EmailAlreadyExistsException("Email already exists");
+            }
+            if (userRepository.findByUsername(request.getUsername()).isPresent()){
+                logger.info("UsernameAlreadyExistsException thrown");
+                throw  new UsernameAlreadyExistsException("Username already exists");
+            }
+
+            logger.info("RegisterDto and User model mapped");
+            User user = new ObjectMapper().convertValue(request, User.class);
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+            user.setRole(UserRole.USER);
+            logger.info("User model saved");
+            var savedUser = userRepository.save(user);
+
+            logger.info("Access token generated");
+            var accessToken = jwtService.generateToken(savedUser);
+            logger.info("refresh token generated");
+            RefreshToken refreshToken = refreshTokenService.createRefreshToken(savedUser.getEmail());
+
+            logger.info("Auth Response returned. register() ended.");
+            return new AuthResponse(accessToken, refreshToken.getRefreshToken());
+
+        } catch (Exception ex) {
+            throw new SomethingWentWrongException(ex.getClass().getSimpleName() + " : " + ex.getMessage());
+        }
+
     }
 
 
