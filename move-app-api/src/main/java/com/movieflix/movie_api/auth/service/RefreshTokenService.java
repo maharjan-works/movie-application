@@ -40,6 +40,9 @@ public class RefreshTokenService {
                    .user(user)
                    .build();
            refreshTokenRepository.save(refreshToken);
+       }else if (refreshToken != null && refreshToken.getExpirationTime().isBefore(Instant.now())){
+           refreshToken.setExpirationTime(Instant.now().plusMillis(1000*60*60*5));
+           refreshTokenRepository.save(refreshToken);
        }
        return refreshToken;
     }
@@ -52,14 +55,11 @@ public class RefreshTokenService {
 //        if(refToken.getExpirationTime().compareTo(Instant.now()) < 0){
         logger.info("checking if refresh token expired?");
           if(refToken.getExpirationTime().isBefore(Instant.now())){
-
             refreshTokenRepository.delete(refToken);
-
             logger.info("if refresh token expired, then deleting it from DB and throwing RefreshTokenAlreadyExpiredException");
-
-            throw new RefreshTokenAlreadyExpiredException("Refresh token already expired, so it is deleted. now now login needed.");
+            throw new RefreshTokenAlreadyExpiredException("Refresh token already expired, so it is deleted.Now login is needed.");
         }
-          logger.info("returning refresh token if not expired");
+          logger.info("returning refresh token if not expired and exiting verifyRefreshToken() method");
         return refToken;
     }
 

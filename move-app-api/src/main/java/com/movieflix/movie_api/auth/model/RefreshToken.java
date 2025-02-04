@@ -28,6 +28,6 @@ public class RefreshToken {
     @Column(nullable = false)
     private Instant expirationTime;
 
-    @OneToOne
+    @OneToOne (cascade = CascadeType.DETACH)
     private User user;
 }

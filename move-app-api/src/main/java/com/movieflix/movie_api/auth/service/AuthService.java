@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,7 @@ public class AuthService {
 
 
     public AuthResponse register(RegisterRequest request) {
+        logger.info("register() started");
 
         try {
 
@@ -75,7 +77,7 @@ public class AuthService {
             logger.info("refresh token generated");
             RefreshToken refreshToken = refreshTokenService.createRefreshToken(savedUser.getEmail());
 
-            logger.info("Auth Response returned. register() ended.");
+            logger.info("Auth Response returned & register() ended gracefully.");
             return new AuthResponse(accessToken, refreshToken.getRefreshToken());
 
         } catch (Exception ex) {
@@ -86,14 +88,26 @@ public class AuthService {
 
 
     public AuthResponse login(LoginRequest request){
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-        );
-        var user = userRepository.findByEmail(
-                request.getEmail()).orElseThrow(()-> new UsernameNotFoundException("User not found ")
-        );
-        var accessToken = jwtService.generateToken(user);
-        var refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
-        return new AuthResponse(accessToken,refreshToken.getRefreshToken());
+        logger.info("login() method started");
+        try{
+            Authentication authentication=authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+            );
+            logger.info("IsAuthenticated? : "+ authentication.isAuthenticated());
+            var user = userRepository.findByEmail(
+                    request.getEmail()).orElseThrow(()-> new UsernameNotFoundException("User not found ")
+            );
+            logger.info("userDetails fetched by email");
+            var accessToken = jwtService.generateToken(user);
+            logger.info("access token generated");
+            var refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
+            logger.info("refresh token generated");
+            logger.info("exited login() method gracefully by returning AuthResponse instance");
+            return new AuthResponse(accessToken,refreshToken.getRefreshToken());
+        }catch(Exception ex){
+            logger.info(ex.getClass().getSimpleName() + " : " + ex.getMessage());
+            throw new SomethingWentWrongException(ex.getClass().getSimpleName()+ " :  " + ex.getMessage());
+        }
+
     }
 }

@@ -35,7 +35,6 @@ public class MovieController {
         return new  ResponseEntity<>(movieService.addMovie(dto, file), HttpStatus.CREATED);
     }
 
-
     @GetMapping("/{id}")
     public ResponseEntity<MovieDto> getById(@PathVariable Integer id){
         return ResponseEntity.ok(movieService.getMovie(id));
@@ -83,9 +82,9 @@ public class MovieController {
     }
 
 
-    private MovieDto convertToMovieDto(String movieDtoObj) throws JsonProcessingException {
+    private MovieDto convertToMovieDto(String movieDto) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(movieDtoObj, MovieDto.class);
+        return objectMapper.readValue(movieDto, MovieDto.class);
     }
 
 
