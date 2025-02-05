@@ -46,4 +46,14 @@ public class GlobalExceptionHandler {
     public ProblemDetail handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex){
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
+
+    @ExceptionHandler(PasswordMismatchedException.class)
+    public ProblemDetail handlePasswordMismatchedException(PasswordMismatchedException ex){
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidCurrentPasswordException.class)
+    public ProblemDetail handleInvalidCurrentPasswordException(InvalidCurrentPasswordException ex){
+        return ProblemDetail.forStatusAndDetail(HttpStatus.EXPECTATION_FAILED, ex.getMessage());
+    }
 }

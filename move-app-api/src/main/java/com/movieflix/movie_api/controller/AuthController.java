@@ -18,6 +18,7 @@ import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@CrossOrigin(origins = "*")
 public class AuthController {
 
     @Autowired
@@ -45,7 +46,10 @@ public class AuthController {
        User user = refreshToken.getUser();
 
        String accessToken = jwtService.generateToken(user);
-       return  ok(new AuthResponse(accessToken,refreshToken.getRefreshToken()));
+       return  ok(new AuthResponse(
+               accessToken,refreshToken.getRefreshToken(),
+               user.getFirstName(),user.getLastName(),user.getEmail(),user.getUsername()
+       ));
     }
 
     @DeleteMapping("/refresh-token/{id}")

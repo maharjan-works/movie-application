@@ -54,8 +54,6 @@ public class AuthService {
     public AuthResponse register(RegisterRequest request) {
         logger.info("register() started");
 
-        try {
-
             if (userRepository.findByEmail(request.getEmail()).isPresent()) {
                 logger.info("EmailAlreadyExistsException thrown");
                 throw new EmailAlreadyExistsException("Email already exists");
@@ -78,11 +76,16 @@ public class AuthService {
             RefreshToken refreshToken = refreshTokenService.createRefreshToken(savedUser.getEmail());
 
             logger.info("Auth Response returned & register() ended gracefully.");
-            return new AuthResponse(accessToken, refreshToken.getRefreshToken());
+            return new AuthResponse(
+                    accessToken,
+                    refreshToken.getRefreshToken(),
+                    savedUser.getFirstName(),
+                    savedUser.getLastName(),
+                    savedUser.getEmail(),
+                    savedUser.getUsername()
+            );
 
-        } catch (Exception ex) {
-            throw new SomethingWentWrongException(ex.getClass().getSimpleName() + " : " + ex.getMessage());
-        }
+
 
     }
 
@@ -103,7 +106,14 @@ public class AuthService {
             var refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
             logger.info("refresh token generated");
             logger.info("exited login() method gracefully by returning AuthResponse instance");
-            return new AuthResponse(accessToken,refreshToken.getRefreshToken());
+            return new AuthResponse(
+                    accessToken,
+                    refreshToken.getRefreshToken(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getUsername()
+            );
         }catch(Exception ex){
             logger.info(ex.getClass().getSimpleName() + " : " + ex.getMessage());
             throw new SomethingWentWrongException(ex.getClass().getSimpleName()+ " :  " + ex.getMessage());
