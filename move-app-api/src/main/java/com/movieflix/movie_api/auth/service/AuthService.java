@@ -116,7 +116,7 @@ public class AuthService {
             );
         }catch(Exception ex){
             logger.info(ex.getClass().getSimpleName() + " : " + ex.getMessage());
-            throw new SomethingWentWrongException(ex.getClass().getSimpleName()+ " :  " + ex.getMessage());
+            throw new SomethingWentWrongException(ex.getMessage());
         }
 
     }
