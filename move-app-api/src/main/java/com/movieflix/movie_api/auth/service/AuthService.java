@@ -120,4 +120,9 @@ public class AuthService {
         }
 
     }
+
+
+    public String updateUser(User user){
+        return "user is updated";
+    }
 }
