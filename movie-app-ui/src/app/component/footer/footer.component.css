@@ -1,0 +1,10 @@
+.footer{
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: black;
+  color: var(--primary-color);
+  padding: .5rem 1rem;
+  font-size: small;
+}

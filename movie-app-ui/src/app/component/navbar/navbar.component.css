@@ -1,0 +1,35 @@
+.navbar{
+  display: flex;
+  background: var(--primary-color);
+  justify-content: space-between;
+  align-items: center;
+  padding:.5rem 1rem;
+}
+
+.nav-auth-control a {
+   margin-right: 1rem;
+}
+.nav-option a:hover ,
+.nav-auth-control a:hover{
+  color: #ddd;
+}
+.nav-option a:focus,
+.nav-auth-control a:focus{
+  border-bottom: 4px solid black;
+  color:blue;
+  padding-bottom: .5rem;
+}
+
+.nav-option select{
+  background: var(--primary-color);
+  font-family: var(--primary-font);
+  text-align: right;
+  border: none;
+}
+
+
+.nav-option select:hover{
+  cursor: pointer;
+  color: #ddd;
+}
+
