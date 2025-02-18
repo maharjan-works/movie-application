@@ -12,36 +12,34 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
  
-  firstName: string = '';
-  lastName: string = '';
-  email: string = '';
-  username: string = '';
-  password: string = '';
+  firstName = new FormControl<string>('', [Validators.required]);
+  lastName = new FormControl<string>('', [Validators.required]);
+  email = new FormControl<string>('', [Validators.required, Validators.email]);
+  username = new FormControl<string>('', [Validators.required]);
+  password = new FormControl<string>('', [Validators.required, Validators.minLength(5)]);
 
-  loginForm!: FormGroup;
+  registerForm!: FormGroup;
+
+  inlineNotification:{show: boolean, type: string, text: string} = {
+    show: false,
+    type: '',
+    text: '',
+  }
 
   ngOnInit(): void {
-
-    this.loginForm = new FormGroup({
-      firstName: new FormControl(this.firstName, Validators.required),
-      lastName: new FormControl(this.lastName, Validators.required),
-      email: new FormControl(this.email, [Validators.required, Validators.email]),
-      username: new FormControl(this.username, Validators.required),
-      password: new FormControl(this.password, [Validators.required, Validators.minLength(5)]),
-
+    this.registerForm = new FormGroup({
+      firstName: this.firstName,
+      lastName: this.lastName,
+      email: this.email,
+      username: this.username,
+      password: this.password
     })
     
   }
 
 
-
-
-
-
-
-
   register(){
-    console.log(this.loginForm.value);
+    console.log("Register Form Value: " , this.registerForm.value);
 
   }
 
