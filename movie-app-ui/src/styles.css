@@ -10,6 +10,9 @@
   --primary-color: rgb(130, 21, 21);
   --primary-font: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
+body{
+  background: var(--primary-color);
+}
 
 a{
   text-decoration: none;
