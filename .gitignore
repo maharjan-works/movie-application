@@ -1,1 +1,3 @@
-movie-app-ui/.angular
+movie-app-ui/.angular/*
+
+move-app-api/target/*
