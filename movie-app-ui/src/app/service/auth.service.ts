@@ -14,6 +14,11 @@ export class AuthService {
   register(registerRequest: RegisterRequest): Observable<AuthResponse>{
     return this.http.post<AuthResponse>(`${this.BASE_URL}/register`, registerRequest);
   }
+
+  login(loginRequest: LoginRequest): Observable<AuthResponse>{
+    return this.http.post<AuthResponse>(`${this.BASE_URL}/login`, loginRequest);
+  }
+
 }
 
 export type RegisterRequest = {
@@ -31,4 +36,9 @@ export type AuthResponse = {
   lastName: string,
   email: string,
   username: string,
+}
+
+export type LoginRequest = {
+  email: string,
+  password: string,
 }

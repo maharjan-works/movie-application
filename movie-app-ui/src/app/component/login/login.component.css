@@ -1,0 +1,50 @@
+.container{
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+.login-form{
+  min-width: 300px;
+  padding: 1rem;
+  border: none;
+  border-radius: .5rem;
+  box-shadow: 1px 1px 3px 3px grey;
+}
+.login-form h2{
+  margin-bottom: 1rem;
+  text-align: center;
+}
+.form-group{
+  width: inherit;
+  display: grid;
+  margin-bottom: 1rem;
+}
+.form-group label{
+  font-size: .5rem;
+  width: fit-content;
+  margin-bottom: -1rem;
+  z-index: 1;
+  padding: 0 .5rem;
+  border-radius: .5rem;
+}
+.form-group>input{
+  height: 3rem;
+  padding-left: .5rem;
+  border-radius: .5rem;
+  border:none;
+}
+.form-group>button{
+  height: 2rem;
+  width: 60%;
+  margin: 0 auto;
+  font-weight: bold;
+  background: black;
+  color: white;
+  border:none;
+  border-radius: .5rem;
+}
+
+.form-group>button:hover{
+  background: #00f;
+}
+

@@ -23,10 +23,10 @@ a{
   text-align: center;
   font-size: small;
   color: #f00;
+  margin-bottom: 1rem;
 }
 .alert-message{
   color: yellow;
   font-size: .7rem;
-
 }
 
