@@ -38,12 +38,5 @@
 .form-group button:hover{
   color: #fff;
   background-color: blue;
-  border:1px solid white;
 }
 
-
-.invalid-message{
-  color: #f00;
-  font-size: .7rem;
-  padding-top:5px;
-}

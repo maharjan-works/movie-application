@@ -19,3 +19,14 @@ a{
   color: black;
 }
 
+.error-message{
+  text-align: center;
+  font-size: small;
+  color: #f00;
+}
+.alert-message{
+  color: yellow;
+  font-size: .7rem;
+
+}
+
