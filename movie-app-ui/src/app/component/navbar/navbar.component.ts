@@ -21,7 +21,6 @@ export class NavbarComponent {
     this.isLoggedIn = this.authService.getLoggedIn();
   }
 
-
   logout(){
     this.authService.logout();
     this.authService.setLoggedIn(false);
