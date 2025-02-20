@@ -7,9 +7,7 @@
 }
 
 .nav-option a{
-  
   padding: 0 .5rem;
-  
 }
 
 .nav-auth-control a {
@@ -26,6 +24,12 @@
   color:blue;
   padding-bottom: .5rem;
 }
+
+.logout{
+  cursor: pointer;
+}
+
+
 
 
 

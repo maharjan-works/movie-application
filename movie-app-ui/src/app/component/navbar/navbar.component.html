@@ -8,8 +8,12 @@
   </div>
 
   <div class="nav-auth-control">
-    <a routerLink="/login">Login</a>
-    <a routerLink="/register">Register</a>
+    <a routerLink="/login" *ngIf = "!isLoggedIn()">Login</a>
+    <a routerLink="/register" *ngIf = "!isLoggedIn()">Register</a>
+
+    <!-- for authenticated user only -->
+    <span *ngIf="isLoggedIn()">{{name}}</span>
+    <a (click)="logout()" class="logout" *ngIf="isLoggedIn()">Logout</a>
   </div>
 
 </div>
