@@ -11,13 +11,13 @@ import { AuthService } from '../../service/auth.service';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
-
-  name = sessionStorage.getItem('name');
+  name: string | null =  '';
   isLoggedIn = signal<boolean>(false);
 
   constructor(private authService: AuthService, private router: Router){}
 
   ngOnInit(): void{
+    this.name = sessionStorage.getItem('name');
     this.isLoggedIn = this.authService.getLoggedIn();
   }
 

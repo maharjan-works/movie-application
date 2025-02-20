@@ -25,7 +25,6 @@ export class AuthService {
           sessionStorage.setItem('name', response.firstName + ' '+ response.lastName);
           sessionStorage.setItem('email', response.email);
           sessionStorage.setItem('username', response.username);
-          this.setLoggedIn(true);
         }
       })
     );

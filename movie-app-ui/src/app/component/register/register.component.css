@@ -19,11 +19,20 @@
 }
 
 .form-group label{
-  font-size: .7rem;
+  font-size: .5rem;
+  margin-bottom: -1rem;
+  padding-left: .5rem;
+  z-index: 1;
 }
 .form-group input{
   height: 1.7rem;
   padding-left: .5rem;
+  height: 3rem;
+  border-radius: .5rem;
+  border:none;
+}
+.form-group input:focus {
+  border-color:none;
 }
 .form-group button{
   width: 80%;

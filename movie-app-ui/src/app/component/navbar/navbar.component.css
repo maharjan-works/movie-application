@@ -25,9 +25,18 @@
   padding-bottom: .5rem;
 }
 
+.authenticated-user{
+  color: #eee;
+  margin-right: .5rem;
+  padding: .5rem;
+  box-shadow: 1px 1px 1px white;
+  border-radius: .5rem;
+}
+
 .logout{
   cursor: pointer;
 }
+
 
 
 

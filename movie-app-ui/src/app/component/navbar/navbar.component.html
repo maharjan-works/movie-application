@@ -3,7 +3,7 @@
 
   <div class="nav-option">
     <a routerLink="">Home</a>
-    <a routerLink="/add-movie">Add Movie</a>
+    <a routerLink="/add-movie" *ngIf="isLoggedIn()">Add Movie</a>
     <a routerLink="/show-movies">Show Movies</a>
   </div>
 
@@ -12,7 +12,7 @@
     <a routerLink="/register" *ngIf = "!isLoggedIn()">Register</a>
 
     <!-- for authenticated user only -->
-    <span *ngIf="isLoggedIn()">{{name}}</span>
+    <span *ngIf="isLoggedIn()" class="authenticated-user">{{name}}</span>
     <a (click)="logout()" class="logout" *ngIf="isLoggedIn()">Logout</a>
   </div>
 

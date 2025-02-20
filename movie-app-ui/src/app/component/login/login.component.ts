@@ -20,8 +20,9 @@ export class LoginComponent implements OnInit {
 
   loginForm!: FormGroup;
 
-  inlineNotification: {show: boolean, message: string} ={
+  inlineNotification: {show: boolean, type: string,message: string} ={
     show: false,
+    type: '',
     message: '',
   }
 
@@ -49,6 +50,7 @@ export class LoginComponent implements OnInit {
       this.authService.login(loginRequest).subscribe({
        next: (res: any) => {
         console.log(res);
+        this.authService.setLoggedIn(true);
         this.router.navigate(['home']);
        },
        error: (err: any) => {
@@ -59,8 +61,11 @@ export class LoginComponent implements OnInit {
       })
 
     }else{
-      this.inlineNotification.show=true;
-      this.inlineNotification.message="Please, fill up fields!"
+      this.inlineNotification = {
+        show: true,
+        type: 'error',
+        message: 'Please, fill up all fields carefully!'
+      }      
       console.log("Error: ", this.inlineNotification);
 
     }
